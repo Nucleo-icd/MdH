@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Diretoria HSPE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #29C1DC, #00A5B4);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .background-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+        }
+        
+        .shape-1 {
+            width: 300px;
+            height: 300px;
+            background: #1D5636;
+            top: -100px;
+            left: -100px;
+        }
+        
+        .shape-2 {
+            width: 200px;
+            height: 200px;
+            background: #4A913A;
+            bottom: -50px;
+            right: -50px;
+        }
+        
+        .shape-3 {
+            width: 150px;
+            height: 150px;
+            background: #8CC04B;
+            top: 50%;
+            left: 70%;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            z-index: 1;
+        }
+        
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        .login-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #1D5636;
+        }
+        
+        .logo i {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: none;
+            background: #f0f0f0;
+            border-radius: 50px;
+            outline: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus {
+            background: #e0e0e0;
+            box-shadow: 0 0 0 2px #8CC04B;
+        }
+        
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            color: #4A913A;
+        }
+        
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            background: #1D5636;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background: #4A913A;
+            transform: scale(1.05);
+        }
+        
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .loading-gif {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 20px;
+            object-fit: contain; /* Impede a distorção do GIF */
+        }
+        
+        .loading-text {
+            color: #1D5636;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .menu-container {
+            display: none;
+            width: 100%;
+            max-width: 1200px;
+            padding: 20px;
+            animation: fadeIn 1s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .menu-title {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            font-size: 28px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .bubble-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 25px;
+        }
+        
+        .bubble-btn {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            aspect-ratio: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            text-align: center;
+            padding: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transform: scale(1);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .bubble-btn:hover {
+            transform: scale(1.15);
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+        }
+        
+        .bubble-btn span {
+            position: relative;
+            z-index: 2;
+            font-size: 14px;
+        }
+        
+        .logout-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            z-index: 100;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        
+        .back-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            z-index: 100;
+            display: none;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        
+        @media (max-width: 768px) {
+            .bubble-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .bubble-btn {
+                padding: 15px;
+                font-size: 14px;
+            }
+            
+            .bubble-btn span {
+                font-size: 12px;
+            }
+            
+            .logout-btn, .back-btn {
+                width: 50px;
+                height: 50px;
+                bottom: 15px;
+            }
+            
+            .logout-btn {
+                right: 15px;
+            }
+            
+            .back-btn {
+                left: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .bubble-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 15px;
+            }
+            
+            .bubble-btn {
+                padding: 10px;
+                font-size: 12px;
+            }
+            
+            .bubble-btn span {
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+    
+    <div class="container" id="loginContainer">
+        <div class="login-card">
+            <div class="logo">
+                <i class="fas fa-hospital"></i>
+                <h1>Diretoria HSPE</h1>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" id="username" placeholder="Usuário" autocomplete="off">
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" placeholder="Senha">
+            </div>
+            <button onclick="login()">Entrar</button>
+        </div>
+    </div>
+    
+    <div class="loading-screen" id="loadingScreen">
+        <!-- GIF LOCAL - MESMA PASTA QUE O ARQUIVO HTML -->
+        <img src="loopload.gif" alt="Carregando" class="loading-gif">
+        <p class="loading-text">Carregando painéis...</p>
+    </div>
+    
+    <div class="menu-container" id="menuContainer">
+        <h1 class="menu-title">Painéis de Diretoria - HSPE</h1>
+        <div class="bubble-grid">
+            <a href="https://app.powerbi.com/view?r=eyJrIjoiZGMwNmM3NTktMGQ2ZC00ZDFkLWFmOWQtOTBlNzE4ZjQ0MjMyIiwidCI6IjNhNzhiMGNkLTdjOGUtNDkyOS04M2Q1LTE5MGA2Y2MwMTM2NSJ9" class="bubble-btn" target="_blank" onclick="showBackButton()"><span>ALERGIA</span></a>
+            <a href="https://app.powerbi.com/view?r=eyJrIjoiMWNjY2FhOTMtNGQ4OS00YzRkLThlNjItZjQ5Yjc5MmU1YzU0IiwidCI6IjNhNzhiMGNkLTdjOGUtNDkyOS04M2Q1LTE5MGA2Y2MwMTM2NSJ9" class="bubble-btn" target="_blank" onclick="showBackButton()"><span>ANATOMIA PATOLÓGICA</span></a>
+            <a href="https://app.powerbi.com/view?r=eyJrIjoiM2MxZDRkMjYtZWEyOS00NTQ1LWIxOGQtZGE4YTIyZDQ0OWEyIiwidCI6IjNhNzhiMGNkLTdjOGUtNDkyOS04M2Q1LTE5MGA2Y2MwMTM2NSJ9" class="bubble-btn" target="_blank" onclick="showBackButton()"><span>ANESTESIOLOGIA</span></a>
+            <a href="https://app.powerbi.com/view?r=eyJrIjoiNzA4YTZjZGItZWYyMy00MTE3LTg2ZWUtMTU2OGMxMjY0MTlmIiwidCI6IjNhNzhiMGNkLTdjOGUtNDkyOS04M2Q1LTE5MGA2Y2MwMTM2NSJ9" class="bubble-btn" target="_blank" onclick="showBackButton()"><span>ASSIST MATERNO FETAL</span></a>
+            <a href="https://app.powerbi.com/view?r=eyJrIjoiOTA1Y2JjMDMtMTBjZS00NWU5LTg5MjMtMTNmZDcxZmI5NWM0IiwidCI6IjNhNzhiMGNkLTdjOGUtNDkyOS04M2Q1LTE5MGA2Y2MwMTM2NSJ9" class="bubble-btn" target="_blank" onclick="showBackButton()"><span>ASSISTÊNCIA DOMICILIAR</span></a>
+            <a href="https://app.powerbi.com/view?r=eyJrIjoiZTEzZTZkNjUtMjgwNy00YTcxLWE5ODMtNWU0YzIzYTA2N2M5IiwidCI6IjNhNzhiMGNkLTdjOGUtNDkyOS04M2Q1LTE5MGA2Y2MwMTM2NSJ9" class="bubble-btn" target="_blank" onclick="showBackButton()"><span>BUCOMAXILO</span></a>
+            <a href="https://app.powerbi.com/view?r=eyJrIjoiZTg2MzBmNWYtYmVjMS00MDkxLWE0NDQtMGQ2ZTA3MDg2MzRmIiwidCI6IjNhNzhiMGNkLTdjOGUtNDkyOS04M2Q1LTE5MGA2Y2MwMTM2NSJ9" class="bubble-btn" target="_blank" onclick="showBackButton()"><span>CARDIOLOGIA</span></a>
+            <a href="https://app.powerbi.com/view?r=eyJrIjoiZDJhOGIyODktMzkxYy00ODEwLTg4NTMtMWQ3NTNmYzczOGQxIiwidCI6IjNhNzhiMGNkLTdjOGUtNDkyOS04M2Q1LTE5MGA2Y2MwMTM2NSJ9" class="bubble-btn" target="_blank" onclick="showBackButton()"><span>CEAME</span></a>
+            <a href="https://app.powerbi.com/view?r=eyJrIjoiMmE4OTVhOWEtNjQ5Zi00NWE5LWIxZWItMTY1YzU0NzNlOTVjIiwidCI6IjNhNzhiMGNkLTdjOGUtNDkyOS04M2Q1LTE5MGA2Y2MwMTM2NSJ9" class="bubble-btn" target="_blank" onclick="showBackButton()"><span>CENTRO DE INFUSÃO</span></a>
+            <a href="https://app.powerbi.com/view?r=eyJrIjoiMzkzOTg3ZDEtZGU2MC00YWZlLWFlODAtMzRjNjk4Nzg5MDRlIiwidCI6IjNhNzhiMGNkLTdjOGUtNDkyOS04M2Q1LTE5MGA2Y2MwMTM2NSJ9" class="bubble-btn" target="_blank" onclick="showBackButton()"><span>CIRURGIA CABEÇA E PESCOÇO</span></a>
+            <a href="https://app.powerbi.com/view?r=eyJrIjoiZmVkZjJiZDUtMDY3Ny00MzdlLTgxYTUtYmQyN2JlMjAzMTIzIiwidCI6IjNhNzhiMGNkLTdjOGUtNDkyOS04M2Q1LTE5MGA2Y2MwMTM2NSJ9" class="bubble-btn" target="_blank" onclick="showBackButton()"><span>CIRURGIA CARDÍACA</span></a>
+            <a href="https://app.powerbi.com/view?r=eyJrIjoiZDVhZDg2MjMtYTU1Yi00Yzc1LTlhMzktYzlmYTFiODYzMGMzIiwidCI6IjNhNzhiMGNkLTdjOGUtNDkyOS04M2Q1LTE5MGA2Y2MwMTM2NSJ9" class="bubble-btn" target="_blank" onclick="showBackButton()"><span>CIRURGIA GERAL</span></a>
+            <a href="https://app.powerbi.com/view?r=eyJrIjoiZWRhNDg3ODMtNzQwOS00Y2EzLTgwNWYtNDQ2NjM4ZTIwYTBmIiwidCI6IjNhNzhiMGNkLTdjOGUtNDkyOS04M2Q1LTE5MGA2Y2MwMTM2NSJ9" class="bubble-btn" target="_blank" onclick="showBackButton()"><span>CIRURGIA PEDIÁTRICA</span></a>
+            <a href="https://app.powerbi.com/view?r=eyJrIjoiNzFiMmJiNTgtODg0ZC00MTIyLWFiZGMtM2JmYWE1OWYzNTA3IiwidCI6IjNhNzhiMGNkLTdjOGUtNDkyOS04M2Q1LTE5MGA2Y2MwMTM2NSJ9" class="bubble-btn" target="_blank" onclick="showBackButton()"><span>CIRURGIA PLÁSTICA</span></a>
+        </div>
+    </div>
+    
+    <div class="logout-btn" id="logoutBtn" title="Sair" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i>
+    </div>
+    
+    <div class="back-btn" id="backBtn" title="Voltar para o menu" onclick="goBack()">
+        <i class="fas fa-arrow-left"></i>
+    </div>
+
+    <script>
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username === 'DiretorHspe' && password === 'senhahspe') {
+                // Mostra a tela de carregamento
+                document.getElementById('loadingScreen').style.display = 'flex';
+                document.getElementById('loginContainer').style.display = 'none';
+                
+                // Simula o tempo de carregamento (3 segundos)
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').style.display = 'none';
+                    document.getElementById('menuContainer').style.display = 'block';
+                    document.getElementById('logoutBtn').style.display = 'flex';
+                }, 3000);
+            } else {
+                alert('Usuário ou senha incorretos!');
+            }
+        }
+        
+        function logout() {
+            if (confirm('Deseja realmente sair?')) {
+                document.getElementById('menuContainer').style.display = 'none';
+                document.getElementById('logoutBtn').style.display = 'none';
+                document.getElementById('backBtn').style.display = 'none';
+                document.getElementById('loginContainer').style.display = 'block';
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+            }
+        }
+        
+        function showBackButton() {
+            // Mostra o botão de voltar após clicar em um link
+            setTimeout(() => {
+                document.getElementById('backBtn').style.display = 'flex';
+            }, 1000);
+        }
+        
+        function goBack() {
+            // Fecha a aba atual e volta para o menu
+            window.history.back();
+        }
+        
+        // Permitir login com Enter
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                login();
+            }
+        });
+        
+        // Verificar se estamos em uma página aberta a partir do menu
+        window.onload = function() {
+            if (window.location !== window.parent.location) {
+                // A página está sendo exibida em um iframe ou nova aba
+                document.getElementById('backBtn').style.display = 'flex';
+            }
+        };
+    </script>
+</body>
+</html>
