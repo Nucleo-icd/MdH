@@ -1,0 +1,94 @@
+:root {
+  --primary: #1D5636;   /* verde principal */
+  --secondary: #29C1DC; /* azul claro */
+  --bg-light: #f8f9fa;
+  --text-dark: #333;
+}
+
+* {
+  margin: 0; padding: 0; box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+/* Fundo */
+body {
+  background: var(--bg-light);
+  height: 100vh;
+  display: flex; justify-content: center; align-items: center;
+  overflow: hidden; position: relative;
+}
+
+/* Formulário */
+.login-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  text-align: center;
+}
+
+/* Inputs */
+input {
+  width: 100%;
+  padding: 12px 40px;
+  margin-bottom: 15px;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+}
+
+input:focus {
+  border-color: var(--secondary);
+  outline: none;
+}
+
+/* Botão login */
+button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 25px;
+  background: var(--primary);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--secondary);
+}
+
+/* Grid dos setores */
+.menu-container {
+  display: none;
+  padding: 20px;
+  max-width: 1200px;
+}
+
+.bubble-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.bubble-btn {
+  background: var(--primary);
+  border-radius: 50%;
+  aspect-ratio: 1;
+  color: white;
+  display: flex; justify-content: center; align-items: center;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.bubble-btn:hover {
+  background: var(--secondary);
+  transform: scale(1.1);
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .bubble-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+}
